@@ -1,0 +1,13 @@
+{
+  "itemGroup.override": "Example Mod Tab",
+  "block.override.example_block": "Example Block",
+  "item.override.example_item": "Example Item",
+
+  "override.configuration.title": "Override Configs",
+  "override.configuration.section.override.common.toml": "Override Configs",
+  "override.configuration.section.override.common.toml.title": "Override Configs",
+  "override.configuration.items": "Item List",
+  "override.configuration.logDirtBlock": "Log Dirt Block",
+  "override.configuration.magicNumberIntroduction": "Magic Number Text",
+  "override.configuration.magicNumber": "Magic Number"
+}
