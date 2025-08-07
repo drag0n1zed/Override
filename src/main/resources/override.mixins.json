@@ -2,7 +2,12 @@
   "required": true,
   "package": "io.github.drag0n1zed.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
+  "mixins": [
+    "LivingEntityMixin"
+  ],
+  "client": [
+    "LivingEntityRendererMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

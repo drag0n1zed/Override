@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "override:block/surgical_station" }
+  }
+}
