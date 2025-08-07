@@ -14,11 +14,17 @@ tasks.named('wrapper', Wrapper).configure {
     distributionType = Wrapper.DistributionType.BIN
 }
 
+
 version = mod_version
 group = mod_group_id
 
 repositories {
     // Add here additional repositories if required by some of the dependencies below.
+    maven {
+        name = "Gegy"
+        url = uri("https://maven.gegy.dev")
+    }
+    mavenCentral()
 }
 
 base {
@@ -133,7 +139,27 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    implementation("dev.lambdaurora:spruceui:${project.spruceui_version}") {
+        capabilities {
+            requireCapability("dev.lambdaurora:spruceui-mojmap")
+        }
+    }
+    jarJar(implementation("dev.lambdaurora:spruceui:${project.spruceui_version}")) {
+        // The capabilities block for mojmap MUST be inside the implementation() call.
+        capabilities {
+            requireCapability("dev.lambdaurora:spruceui-mojmap")
+        }
+        // The version block is the correct way to "pin" the dependency.
+        version {
+            // This is the equivalent of the version range from the pin() method.
+            // It ensures your mod requires a version of SpruceUI within this range.
+            strictly '[6.2.3,7.0.0)'
+            // This tells Gradle which version to use in your development environment.
+            prefer project.spruceui_version
+        }
+    }
 }
+
 
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
@@ -177,6 +203,10 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+tasks.named('createMinecraftArtifacts') {
+    dependsOn tasks.named('generateModMetadata')
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

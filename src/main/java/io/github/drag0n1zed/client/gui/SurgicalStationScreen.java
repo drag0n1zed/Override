@@ -1,54 +1,77 @@
 package io.github.drag0n1zed.client.gui;
 
+import dev.lambdaurora.spruceui.Position;
+import dev.lambdaurora.spruceui.SpruceTexts;
+import dev.lambdaurora.spruceui.screen.SpruceScreen;
+import dev.lambdaurora.spruceui.widget.SpruceButtonWidget;
+import io.github.drag0n1zed.client.gui.widget.AIGoalListEntry;
+import io.github.drag0n1zed.client.gui.widget.AIGoalListWidget;
 import io.github.drag0n1zed.screen.SurgicalStationMenu;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-
-public class SurgicalStationScreen extends AbstractContainerScreen<SurgicalStationMenu> {
+public class SurgicalStationScreen extends SpruceScreen implements MenuAccess<SurgicalStationMenu> {
 
     private final SurgicalStationMenu menu;
 
     public SurgicalStationScreen(SurgicalStationMenu menu, Inventory playerInventory, Component title) {
-        super(menu, playerInventory, title);
+        super(title);
         this.menu = menu;
-
-        this.imageWidth = 176;
-        this.imageHeight = 166;
     }
 
     @Override
     protected void init() {
         super.init();
-        // In the future, buttons and other widgets for the new GUI will be initialized here.
-    }
 
-    /**
-     * Renders the background layer of the screen. For now, it's just a dark rectangle.
-     */
-    @Override
-    protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        int x = (this.width - this.imageWidth) / 2;
-        int y = (this.height - this.imageHeight) / 2;
-        // Draw a simple dark background as a placeholder. No texture asset is needed.
-        guiGraphics.fill(x, y, x + this.imageWidth, y + this.imageHeight, 0xFF373737);
+        int topOffset = 24;
+        int bottomOffset = 32;
+
+        var goalList = new AIGoalListWidget(
+                Position.of(this, 0, topOffset),
+                this.width,
+                this.height - topOffset - bottomOffset,
+                AIGoalListEntry.class
+        );
+
+        goalList.addEntry(new AIGoalListEntry(0, "FloatGoal", true));
+        goalList.addEntry(new AIGoalListEntry(1, "PanicGoal", true));
+        goalList.addEntry(new AIGoalListEntry(2, "TemptGoal", true));
+        goalList.addEntry(new AIGoalListEntry(3, "FollowParentGoal", true));
+        goalList.addEntry(new AIGoalListEntry(4, "WaterAvoidingRandomStrollGoal", false));
+        goalList.addEntry(new AIGoalListEntry(5, "LookAtPlayerGoal", true));
+        goalList.addEntry(new AIGoalListEntry(6, "RandomLookAroundGoal", true));
+
+        this.addRenderableWidget(goalList);
+
+        this.addRenderableWidget(new SpruceButtonWidget(
+                Position.of(this, this.width / 2 - 75, this.height - 25),
+                150,
+                20,
+                SpruceTexts.GUI_DONE,
+                btn -> this.onClose()
+        ));
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
-        // Renders tooltips if any widgets have them.
-        renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
-    /**
-     * Renders the text labels on top of the background.
-     */
     @Override
-    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 0xFFFFFFFF, true);
-        guiGraphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0xFFFFFFFF, true);
+    public void renderTitle(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+        guiGraphics.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
+    }
+
+    @Override
+    public SurgicalStationMenu getMenu() {
+        return this.menu;
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
     }
 }
