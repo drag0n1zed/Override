@@ -1,7 +1,7 @@
-package io.github.drag0n1zed.block.entity;
+package io.github.drag0n1zed.registration;
 
 import io.github.drag0n1zed.OverrideMod;
-import io.github.drag0n1zed.block.ModBlocks;
+import io.github.drag0n1zed.block.SurgicalStationBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;

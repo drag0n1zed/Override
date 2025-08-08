@@ -1,6 +1,6 @@
 package io.github.drag0n1zed.mixin;
 
-import io.github.drag0n1zed.api.StunnedEntityAccessor;
+import io.github.drag0n1zed.accessor.StunnedEntityAccessor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;

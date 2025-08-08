@@ -1,4 +1,4 @@
-package io.github.drag0n1zed.api;
+package io.github.drag0n1zed.accessor;
 
 public interface StunnedEntityAccessor {
     boolean override_isStunned();

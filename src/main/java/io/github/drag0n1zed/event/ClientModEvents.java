@@ -1,7 +1,7 @@
 package io.github.drag0n1zed.event;
 
-import io.github.drag0n1zed.client.gui.SurgicalStationScreen;
-import io.github.drag0n1zed.screen.ModMenuTypes;
+import io.github.drag0n1zed.block.menu.SurgicalStationScreen;
+import io.github.drag0n1zed.registration.ModMenuTypes;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

@@ -1,6 +1,5 @@
-package io.github.drag0n1zed.client.gui;
+package io.github.drag0n1zed.block.menu;
 
-import io.github.drag0n1zed.screen.SurgicalStationMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;

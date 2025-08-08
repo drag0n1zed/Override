@@ -3,7 +3,8 @@
   "package": "io.github.drag0n1zed.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "MobMixin"
   ],
   "client": [
     "LivingEntityRendererMixin"

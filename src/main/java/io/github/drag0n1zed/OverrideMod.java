@@ -1,22 +1,16 @@
 package io.github.drag0n1zed;
 
-import io.github.drag0n1zed.block.ModBlocks;
-import io.github.drag0n1zed.block.entity.ModBlockEntities;
-import io.github.drag0n1zed.command.ModCommands;
-import io.github.drag0n1zed.core.ModEffects;
-import io.github.drag0n1zed.screen.ModMenuTypes;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import org.slf4j.Logger;
-
 import com.mojang.logging.LogUtils;
-
+import io.github.drag0n1zed.ai.GoalSerializer;
+import io.github.drag0n1zed.registration.ModBlocks;
+import io.github.drag0n1zed.registration.ModBlockEntities;
+import io.github.drag0n1zed.registration.ModEffects;
+import io.github.drag0n1zed.registration.ModMenuTypes;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import org.slf4j.Logger;
 
 @Mod(OverrideMod.MODID)
 public class OverrideMod {
@@ -30,5 +24,11 @@ public class OverrideMod {
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
+        GoalSerializer.initialize();
+        modEventBus.addListener(this::commonSetup);
+    }
+
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        // Common setup logic
     }
 }

@@ -2,8 +2,8 @@ package io.github.drag0n1zed.event;
 
 import io.github.drag0n1zed.OverrideMod;
 import io.github.drag0n1zed.command.ModCommands;
-import io.github.drag0n1zed.core.ModEffects;
-import io.github.drag0n1zed.api.StunnedEntityAccessor;
+import io.github.drag0n1zed.registration.ModEffects;
+import io.github.drag0n1zed.accessor.StunnedEntityAccessor;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

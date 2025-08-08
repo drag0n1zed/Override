@@ -1,7 +1,7 @@
-package io.github.drag0n1zed.data;
+package io.github.drag0n1zed.datagen;
 
 import io.github.drag0n1zed.OverrideMod;
-import io.github.drag0n1zed.block.ModBlocks;
+import io.github.drag0n1zed.registration.ModBlocks;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;

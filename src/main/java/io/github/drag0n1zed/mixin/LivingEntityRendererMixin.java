@@ -1,6 +1,6 @@
 package io.github.drag0n1zed.mixin;
 
-import io.github.drag0n1zed.api.StunnedEntityAccessor;
+import io.github.drag0n1zed.accessor.StunnedEntityAccessor;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;

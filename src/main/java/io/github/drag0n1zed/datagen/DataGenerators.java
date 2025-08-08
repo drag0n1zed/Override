@@ -1,4 +1,4 @@
-package io.github.drag0n1zed.data;
+package io.github.drag0n1zed.datagen;
 
 import io.github.drag0n1zed.OverrideMod;
 import net.minecraft.core.HolderLookup;

@@ -1,6 +1,7 @@
-package io.github.drag0n1zed.screen;
+package io.github.drag0n1zed.registration;
 
 import io.github.drag0n1zed.OverrideMod;
+import io.github.drag0n1zed.block.menu.SurgicalStationMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;

@@ -1,7 +1,7 @@
-package io.github.drag0n1zed.core;
+package io.github.drag0n1zed.registration;
 
 import io.github.drag0n1zed.OverrideMod;
-import io.github.drag0n1zed.core.effect.StunnedEffect;
+import io.github.drag0n1zed.effect.StunnedEffect;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
 import net.neoforged.bus.api.IEventBus;

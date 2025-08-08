@@ -1,6 +1,7 @@
-package io.github.drag0n1zed.block;
+package io.github.drag0n1zed.registration;
 
 import io.github.drag0n1zed.OverrideMod;
+import io.github.drag0n1zed.block.SurgicalStationBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;

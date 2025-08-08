@@ -1,5 +1,6 @@
-package io.github.drag0n1zed.screen;
+package io.github.drag0n1zed.block.menu;
 
+import io.github.drag0n1zed.registration.ModMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

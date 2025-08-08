@@ -1,4 +1,4 @@
-package io.github.drag0n1zed.command.util;
+package io.github.drag0n1zed.command;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.world.entity.Entity;
