@@ -31,7 +31,7 @@ public record PacketSyncAIGoals(List<AIGoalData> goals) implements CustomPacketP
                 OverrideMod.LOGGER.info("Received AI Goal data from server:");
                 message.goals().forEach(goal -> {
                     // Corrected the formatting string to be a single, valid line.
-                    OverrideMod.LOGGER.info("  - [{}] {} (Running: {})", goal.priority(), goal.goalName(), goal.isRunning());
+                    OverrideMod.LOGGER.info("  - [{}] {} (Running: {})", goal.getPriority(), goal.getGoalName(), goal.isRunning());
                 });
             });
         }

@@ -25,6 +25,7 @@ public class OverrideMod {
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
         GoalSerializer.initialize();
+        io.github.drag0n1zed.ai.predicate.PredicateRegistry.initialize(); // Initialize the new predicate system
         modEventBus.addListener(this::commonSetup);
     }
 

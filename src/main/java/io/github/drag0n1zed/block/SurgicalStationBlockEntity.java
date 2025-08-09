@@ -1,12 +1,16 @@
 package io.github.drag0n1zed.block;
 
+import io.github.drag0n1zed.OverrideMod;
 import io.github.drag0n1zed.ai.AIGoalData;
+import io.github.drag0n1zed.ai.GoalSerializer;
 import io.github.drag0n1zed.ai.GoalType;
+import io.github.drag0n1zed.api.OverrideRegistries;
+import io.github.drag0n1zed.api.goal.IGoalRegistry;
+import io.github.drag0n1zed.api.ai.validation.ValidationResult;
+import io.github.drag0n1zed.block.menu.SurgicalStationMenu;
 import io.github.drag0n1zed.network.ModNetworking;
 import io.github.drag0n1zed.network.packet.PacketSyncAIGoals;
 import io.github.drag0n1zed.registration.ModBlockEntities;
-import io.github.drag0n1zed.block.menu.SurgicalStationMenu;
-import io.github.drag0n1zed.ai.GoalSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -28,7 +32,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class SurgicalStationBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -61,20 +67,40 @@ public class SurgicalStationBlockEntity extends BlockEntity implements MenuProvi
     }
 
     /**
-     * Applies a new set of AI goals to the stored entity data.
+     * Validates and applies a new set of AI goals to the stored entity data.
      * This is the authoritative method for all AI modifications.
+     *
      * @param goals The list of goal descriptions to apply.
-     * @return true if the modification was successfully applied, false otherwise.
+     * @return true if the modification was successfully validated and applied, false otherwise.
      */
     public boolean applyAIModification(List<AIGoalData> goals) {
         if (this.level == null || this.level.isClientSide() || !this.hasCapturedEntity()) {
             return false;
         }
 
+        IGoalRegistry registry = OverrideRegistries.getGoalRegistryProvider();
+        if (registry == null) {
+            OverrideMod.LOGGER.error("Cannot apply AI modification: Registry not available.");
+            return false;
+        }
+
         Optional<Entity> entityOptional = EntityType.create(this.capturedEntityNBT, this.level);
 
         if (entityOptional.isPresent() && entityOptional.get() instanceof Mob mob) {
-            // Use the serializer to save the desired goal list to the mob's persistent NBT.
+            // Step 1: Validate the entire profile before applying anything.
+            Map<AIGoalData, ValidationResult> validationResults = registry.validateProfile(mob, goals);
+            List<String> failures = validationResults.entrySet().stream()
+                    .filter(entry -> !entry.getValue().isSuccess())
+                    .map(entry -> String.format("Goal '%s' failed: %s", entry.getKey().getGoalName(), String.join(", ", entry.getValue().getReasons())))
+                    .toList();
+
+            if (!failures.isEmpty()) {
+                OverrideMod.LOGGER.warn("AI Profile validation failed for mob in station at {}:", getBlockPos());
+                failures.forEach(failure -> OverrideMod.LOGGER.warn(" - {}", failure));
+                return false; // Abort modification
+            }
+
+            // Step 2: If validation passes, apply the changes.
             GoalSerializer.saveGoalsToNBT(mob, goals);
 
             CompoundTag newNbt = new CompoundTag();
@@ -127,9 +153,10 @@ public class SurgicalStationBlockEntity extends BlockEntity implements MenuProvi
         Optional<Entity> entityOptional = EntityType.create(this.capturedEntityNBT, this.level);
 
         if (entityOptional.isPresent() && entityOptional.get() instanceof Mob mob) {
-            // Read from the standard goal selector
+            // Note: This relies on the goal's SimpleName matching the registered identifier.
+            // A more robust system might involve a reverse-lookup map from Goal class to identifier.
+            // For now, this is consistent with the registration in VanillaGoalFactory.
             addGoalsToList(goalsData, mob.goalSelector, GoalType.GOAL);
-            // Read from the target selector
             addGoalsToList(goalsData, mob.targetSelector, GoalType.TARGET);
         }
         return goalsData;
@@ -141,7 +168,8 @@ public class SurgicalStationBlockEntity extends BlockEntity implements MenuProvi
                     type,
                     wrappedGoal.getPriority(),
                     wrappedGoal.getGoal().getClass().getSimpleName(),
-                    wrappedGoal.isRunning()
+                    wrappedGoal.isRunning(),
+                    new CompoundTag() // Parameters are not read from existing AI, only applied
             ));
         }
     }

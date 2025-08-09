@@ -1,60 +1,88 @@
 package io.github.drag0n1zed.api;
 
-import io.github.drag0n1zed.api.goal.GoalFactory;
-import io.github.drag0n1zed.api.registry.IGoalRegistry;
+import io.github.drag0n1zed.api.ai.GoalDefinition;
+import io.github.drag0n1zed.api.ai.predicate.IPredicateRegistry;
+import io.github.drag0n1zed.api.ai.predicate.PredicateDefinition;
+import io.github.drag0n1zed.api.goal.IGoalRegistry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides the central registration points for the Override API.
- * This class is the primary entry point for other mods ("plugins") to
- * add support for their own custom AI goals.
+ * This class is the primary entry point for other mods to register custom
+ * AI goals and the logical predicates that configure them.
  */
 public final class OverrideRegistries {
     @Nullable
-    private static IGoalRegistry registryInstance = null;
+    private static IGoalRegistry goalRegistryInstance = null;
+    @Nullable
+    private static IPredicateRegistry predicateRegistryInstance = null;
 
     private OverrideRegistries() {}
 
     /**
-     * Registers a factory for a custom AI goal.
-     * <p>
-     * This method should be called during your mod's initialization phase.
+     * Registers a complete definition for a custom AI goal.
      *
-     * @param goalName The unique identifier for this goal (e.g., "MyAwesomeGoal").
-     * @param factory  The factory implementation that can create an instance of this goal.
-     * @throws IllegalStateException if called before the Override mod has initialized its API.
+     * @param definition The goal definition, including validation and creation logic.
+     * @throws IllegalStateException if called before the Override mod has initialized its registries.
      */
-    public static void registerGoalFactory(String goalName, GoalFactory factory) {
-        if (registryInstance == null) {
-            throw new IllegalStateException("Cannot register goal factory. The Override mod's API registry has not been initialized yet.");
+    public static void registerGoal(GoalDefinition definition) {
+        if (goalRegistryInstance == null) {
+            throw new IllegalStateException("Cannot register goal. The Override Goal Registry has not been initialized yet.");
         }
-        registryInstance.register(goalName, factory);
+        goalRegistryInstance.register(definition);
+    }
+
+    /**
+     * Registers a complete definition for a custom targeting predicate.
+     *
+     * @param definition The predicate definition, including its creation logic.
+     * @throws IllegalStateException if called before the Override mod has initialized its registries.
+     */
+    public static void registerPredicate(PredicateDefinition definition) {
+        if (predicateRegistryInstance == null) {
+            throw new IllegalStateException("Cannot register predicate. The Override Predicate Registry has not been initialized yet.");
+        }
+        predicateRegistryInstance.register(definition);
     }
 
     /**
      * FOR INTERNAL USE BY THE OVERRIDE MOD ONLY.
-     * This method is called by the core mod to provide its registry implementation to the API.
-     *
-     * @param registry The implementation of the registry from the core mod.
      */
     @ApiStatus.Internal
-    public static void setRegistryProvider(IGoalRegistry registry) {
-        if (registryInstance != null) {
-            throw new IllegalStateException("The Override API registry provider has already been set.");
+    public static void setGoalRegistryProvider(IGoalRegistry registry) {
+        if (goalRegistryInstance != null) {
+            throw new IllegalStateException("The Override Goal Registry provider has already been set.");
         }
-        registryInstance = registry;
+        goalRegistryInstance = registry;
     }
 
     /**
      * FOR INTERNAL USE BY THE OVERRIDE MOD ONLY.
-     * Retrieves the registry implementation.
-     *
-     * @return The IGoalRegistry implementation, or null if not initialized.
      */
     @ApiStatus.Internal
     @Nullable
-    public static IGoalRegistry getRegistryProvider() {
-        return registryInstance;
+    public static IGoalRegistry getGoalRegistryProvider() {
+        return goalRegistryInstance;
+    }
+
+    /**
+     * FOR INTERNAL USE BY THE OVERRIDE MOD ONLY.
+     */
+    @ApiStatus.Internal
+    public static void setPredicateRegistryProvider(IPredicateRegistry registry) {
+        if (predicateRegistryInstance != null) {
+            throw new IllegalStateException("The Override Predicate Registry provider has already been set.");
+        }
+        predicateRegistryInstance = registry;
+    }
+
+    /**
+     * FOR INTERNAL USE BY THE OVERRIDE MOD ONLY.
+     */
+    @ApiStatus.Internal
+    @Nullable
+    public static IPredicateRegistry getPredicateRegistryProvider() {
+        return predicateRegistryInstance;
     }
 }
